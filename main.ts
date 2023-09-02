@@ -36,10 +36,10 @@ basic.forever(function on_forever() {
             start_time = input.runningTime()
             timer_started = true
         } else {
-            //  计算从开始计时至今的逝去时间，单位为微妙
+            //  计算从开始计时至今的逝去时间，单位为毫秒
             elapsed_time = input.runningTime() - start_time
             //  当逝去时间超过检测时间，开始报警
-            if (elapsed_time >= detect_time * 1000 * 1000) {
+            if (elapsed_time >= detect_time * 60 * 1000) {
                 if (music_played == false) {
                     music_played = true
                     music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.LoopingInBackground)

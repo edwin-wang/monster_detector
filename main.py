@@ -37,10 +37,10 @@ def on_forever():
             start_time = input.running_time()
             timer_started = True
         else:
-            # 计算从开始计时至今的逝去时间，单位为微妙
+            # 计算从开始计时至今的逝去时间，单位为毫秒
             elapsed_time = input.running_time() - start_time
             # 当逝去时间超过检测时间，开始报警
-            if elapsed_time >= detect_time * 1000 * 1000:
+            if elapsed_time >= detect_time * 60 * 1000:
                 if music_played == False:
                     music_played = True
                     music.play(music.tone_playable(262, music.beat(BeatFraction.WHOLE)),
