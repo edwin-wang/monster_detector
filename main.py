@@ -1,8 +1,8 @@
 elapsed_seconds = 0
 elapsed_time = 0
 start_time = 0
-music_played = False
 timer_started = False
+music_played = False
 min_time = 0
 sec_time = 0
 min_str = ""
@@ -12,20 +12,21 @@ show_time = ""
 detect_time = 1
 # 显示开机画面
 basic.show_icon(IconNames.HAPPY)
-basic.show_icon(IconNames.SURPRISED)
-basic.show_icon(IconNames.GIRAFFE)
-basic.show_icon(IconNames.HEART)
 basic.show_string("Let's GO!")
 
+music.set_volume(0)
+music.play(music.tone_playable(262, music.beat(BeatFraction.WHOLE)),
+                        music.PlaybackMode.LOOPING_IN_BACKGROUND)
+
 def on_forever():
-    global timer_started, music_played, start_time, elapsed_time
+    global timer_started, start_time, elapsed_time, music_played
     if input.pin_is_pressed(TouchPin.P2):
         # 按钮被按下亮绿灯，并且重置变量和设置喇叭静音
         pins.digital_write_pin(DigitalPin.P8, 1)
         pins.digital_write_pin(DigitalPin.P12, 0)
-        music.stop_all_sounds()
-        timer_started = False
         music_played = False
+        timer_started = False
+        music.set_volume(0)
         start_time = 0
         elapsed_time = 0
     else:
@@ -40,11 +41,10 @@ def on_forever():
             # 计算从开始计时至今的逝去时间，单位为毫秒
             elapsed_time = input.running_time() - start_time
             # 当逝去时间超过检测时间，开始报警
-            if elapsed_time >= detect_time * 60 * 1000:
-                if music_played == False:
+            if elapsed_time >= detect_time * 20 * 1000:
+                if not music_played:
                     music_played = True
-                    music.play(music.tone_playable(262, music.beat(BeatFraction.WHOLE)),
-                        music.PlaybackMode.LOOPING_IN_BACKGROUND)
+                    music.set_volume(255)
 basic.forever(on_forever)
 
 # 时间显示

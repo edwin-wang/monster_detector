@@ -1,8 +1,8 @@
 let elapsed_seconds = 0
 let elapsed_time = 0
 let start_time = 0
-let music_played = false
 let timer_started = false
+let music_played = false
 let min_time = 0
 let sec_time = 0
 let min_str = ""
@@ -12,19 +12,18 @@ let show_time = ""
 let detect_time = 1
 //  显示开机画面
 basic.showIcon(IconNames.Happy)
-basic.showIcon(IconNames.Surprised)
-basic.showIcon(IconNames.Giraffe)
-basic.showIcon(IconNames.Heart)
 basic.showString("Let's GO!")
+music.setVolume(0)
+music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.LoopingInBackground)
 basic.forever(function on_forever() {
     
     if (input.pinIsPressed(TouchPin.P2)) {
         //  按钮被按下亮绿灯，并且重置变量和设置喇叭静音
         pins.digitalWritePin(DigitalPin.P8, 1)
         pins.digitalWritePin(DigitalPin.P12, 0)
-        music.stopAllSounds()
-        timer_started = false
         music_played = false
+        timer_started = false
+        music.setVolume(0)
         start_time = 0
         elapsed_time = 0
     } else {
@@ -39,10 +38,10 @@ basic.forever(function on_forever() {
             //  计算从开始计时至今的逝去时间，单位为毫秒
             elapsed_time = input.runningTime() - start_time
             //  当逝去时间超过检测时间，开始报警
-            if (elapsed_time >= detect_time * 60 * 1000) {
-                if (music_played == false) {
+            if (elapsed_time >= detect_time * 20 * 1000) {
+                if (!music_played) {
                     music_played = true
-                    music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.LoopingInBackground)
+                    music.setVolume(255)
                 }
                 
             }
