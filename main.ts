@@ -3,16 +3,20 @@ let elapsed_time = 0
 let start_time = 0
 let timer_started = false
 let music_played = false
+let detect_time = 0
 let min_time = 0
 let sec_time = 0
 let min_str = ""
 let sec_str = ""
 let show_time = ""
 //  检测时间，单位：分钟
-let detect_time = 1
+detect_time = 1
 //  显示开机画面
 basic.showIcon(IconNames.Happy)
-basic.showString("Let's GO!")
+basic.showIcon(IconNames.Heart)
+basic.clearScreen()
+pause(500)
+basic.showString("GO!")
 music.setVolume(0)
 music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.LoopingInBackground)
 basic.forever(function on_forever() {
@@ -24,6 +28,8 @@ basic.forever(function on_forever() {
         music_played = false
         timer_started = false
         music.setVolume(0)
+        led.enable(false)
+        pause(3200)
         start_time = 0
         elapsed_time = 0
     } else {
@@ -34,6 +40,7 @@ basic.forever(function on_forever() {
         if (!timer_started) {
             start_time = input.runningTime()
             timer_started = true
+            led.enable(true)
         } else {
             //  计算从开始计时至今的逝去时间，单位为毫秒
             elapsed_time = input.runningTime() - start_time
@@ -53,31 +60,31 @@ basic.forever(function on_forever() {
 })
 //  时间显示
 basic.forever(function on_forever2() {
-    let min_time2: number;
-    let sec_time2: any;
-    let min_str2: any;
-    let sec_str2: any;
-    let show_time2: string;
+    let min_time: number;
+    let sec_time: number;
+    let min_str: string;
+    let sec_str: string;
+    let show_time: string;
     
     if (timer_started == true) {
         //  处理分钟和秒数的时间显示格式
         elapsed_seconds = Math.idiv(elapsed_time, 1000)
-        min_time2 = Math.idiv(elapsed_seconds, 60)
-        sec_time2 = elapsed_seconds % 60
-        if (min_time2 < 10) {
-            min_str2 = "0" + ("" + ("" + min_time2))
+        min_time = Math.idiv(elapsed_seconds, 60)
+        sec_time = elapsed_seconds % 60
+        if (min_time < 10) {
+            min_str = "0" + ("" + ("" + min_time))
         } else {
-            min_str2 = "" + ("" + min_time2)
+            min_str = "" + ("" + min_time)
         }
         
-        if (sec_time2 < 10) {
-            sec_str2 = "0" + ("" + ("" + sec_time2))
+        if (sec_time < 10) {
+            sec_str = "0" + ("" + ("" + sec_time))
         } else {
-            sec_str2 = "" + ("" + sec_time2)
+            sec_str = "" + ("" + sec_time)
         }
         
-        show_time2 = "" + ("" + min_str2) + ":" + ("" + ("" + sec_str2))
-        basic.showString(show_time2)
+        show_time = "" + min_str + ":" + ("" + sec_str)
+        basic.showString(show_time, 90)
     }
     
 })
